@@ -1,15 +1,29 @@
-const express = require('express')
-const app = express()
-const port = 4000
+const express = require('express');
+const app = express();
+const path = require('path');
 
-app.get('/', (req, res) => {
-  res.send('This is My Server!')
-})
+// Handle data from Backend
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/login', (req, res) => {
-    res.send('<h1>Please login</h1>')
-  })
+//path for public Folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+//Render ejs files
+app.set('view engine', 'ejs');
+
+app.get('/', function(req, res) {
+  res.render("index")
+});
+
+app.get('/profile/:username', (req, res) => {
+    res.send(`Welcome, ${req.params.username}`);
+});
+
+app.get('/author/:username/:age', (req, res) => {
+  res.send(`Welcome, ${req.params.username} of age ${req.params.age}`);
+});
+
+app.listen(4000, function() {
+  console.log("its running")
 })
